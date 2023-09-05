@@ -22,7 +22,7 @@ export const DisplayAnImage = () => {
     <View style={styles.container}>
       <Image
         style={styles.logo}
-        source={require('../Assets/Logo.svg')}
+        source={require('../Assets/logo.svg')}
       />
     </View>
   );
