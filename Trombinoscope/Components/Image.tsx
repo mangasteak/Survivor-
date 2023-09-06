@@ -6,13 +6,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  tinyLogo: {
-    width: 50,
-    height: 50,
-  },
   logo: {
-    width: 300,
-    height: 300,
+    width: 250,
+    height: 100,
     alignSelf: 'center',
   },
 });
@@ -22,7 +18,8 @@ export const DisplayAnImage = () => {
     <View style={styles.container}>
       <Image
         style={styles.logo}
-        source={require('../Assets/Logo.svg')}
+        resizeMode="contain"
+        source={require('../Assets/logo.png')}
       />
     </View>
   );
