@@ -12,12 +12,19 @@ import {
 import logo from '../../Assets/logo.png';
 import { Connect } from '../../Components/Connect';
 import { useNavigation } from '@react-navigation/native';
+import { Background } from '../../Components/Background';
 
 export function Login() {
  const navigation = useNavigation();
  const [email, setEmail] = useState('');
  const [password, setPassword] = useState('');
  return (
+   <View style={{flex: 1}}>
+    <Image
+         source={require('../../Assets/background2.png')}
+         style={styles.backgroundImage}
+         resizeMode="cover"
+    />
    <View style={styles.container}>
      <View style={styles.logoView}>
        <Image source={logo} resizeMode="contain" style={styles.logo} />
@@ -41,24 +48,27 @@ export function Login() {
          onChangeText={password => setPassword(password)}
        />
      </View>
+      <View style={styles.buttonView}>
        <TouchableOpacity
-         style={{ backgroundColor: '#147EFB', padding: 10, borderRadius: 4}}
+         style={styles.button}
          onPress={() => {
              Connect(email, password).then((token) => {
                  if (token != "Invalid token") {
-                     navigation.navigate('Trombi', {token: token});
+                     navigation.navigate('Profile', {token: token});
                  }
-             })
-         }}>
+             });
+         }}
+       >
           <Text style={{ color: '#fff' }}>Login</Text>
         </TouchableOpacity>
- </View>
+      </View>
+  </View>
+  </View>
  );
 }
 const styles = StyleSheet.create({
  container: {
    flex: 1,
-   backgroundColor: '#fff',
    alignItems: 'center',
    justifyContent: 'center',
  },
@@ -76,6 +86,15 @@ const styles = StyleSheet.create({
    marginBottom: 20,
    justifyContent: 'center',
    padding: 20,
+   shadowColor: "#000",
+   shadowOffset: {
+   	width: 0,
+   	height: 8,
+   },
+   shadowOpacity: 0.46,
+   shadowRadius: 11.14,
+
+   elevation: 17,
  },
  inputText: {
    height: 50,
@@ -110,6 +129,15 @@ const styles = StyleSheet.create({
    alignItems: 'flex-start',
    marginBottom: 15,
    marginTop: 0,
+   shadowColor: "#000",
+   shadowOffset: {
+   	width: 0,
+   	height: 8,
+   },
+   shadowOpacity: 0.46,
+   shadowRadius: 11.14,
+
+   elevation: 17,
  },
  logo: {
    marginBottom: 25,
@@ -119,8 +147,29 @@ const styles = StyleSheet.create({
  bgContainer: {
   flex: 1,
  },
- image: {
-   flex: 1,
-   justifyContent: "center"
+ buttonView: {
+  shadowColor: "#000",
+  shadowOffset: {
+  	width: 0,
+  	height: 8,
+  },
+  shadowOpacity: 0.46,
+  shadowRadius: 11.14,
+
+  elevation: 17,
+ },
+ button: {
+    backgroundColor: '#147EFB',
+    padding: 10,
+    borderRadius: 4
+ },
+ backgroundImage: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
  },
 });

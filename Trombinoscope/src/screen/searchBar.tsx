@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, FlatList} 
 import { useNavigation } from "@react-navigation/native";
 import SearchBar from 'react-native-material-design-searchbar';
 import { RFValue } from "react-native-responsive-fontsize";
+import { Icon } from 'react-native-elements';
+import { ProfilePicture } from "../../Components/ProfilePicture.tsx";
 
 
 export const HomeScreen = (token) => {
@@ -11,7 +13,24 @@ export const HomeScreen = (token) => {
     const [data, setData] = useState([]);
     const [jsonStringArray, setJsonStringArray] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
+    const [id, setId] = React.useState(null);
 
+    useEffect(() => {
+        async function fetchData(token) {
+            const response = await fetch('https://masurao.fr/api/employees/me', {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Group-Authorization": "Xqkwp3zjCVdV0fBhfzMASBwnK9DcE4xW",
+                    Authorization: "Bearer " + token.route.params.token,
+                }
+            })
+            const json = await response.json();
+            const userId = json.id;
+            setId(userId);
+        }
+        fetchData(token);
+    }, []);
     useEffect(() => {
         fetchData("https://masurao.fr/api/employees", token.route.params.token);
     }, []);
@@ -27,7 +46,6 @@ export const HomeScreen = (token) => {
                     },}
             );
             const json = await response.json();
-            console.log(json);
             const jsonStringArray = json.map((obj) => JSON.stringify(obj));
             setData(json);
             setJsonStringArray(jsonStringArray)
@@ -42,6 +60,11 @@ export const HomeScreen = (token) => {
         const data = JSON.parse(jsonString);
         return `${data.name} ${data.surname}`;
       };
+
+    const parseJsonId = (jsonString) => {
+        const data = JSON.parse(jsonString);
+        return `${data.id}`;
+    }
 
 
     const handleSearch = (text) => {
@@ -58,6 +81,9 @@ export const HomeScreen = (token) => {
                  style={styles.backgroundImage}
                  resizeMode="cover"
                />
+            <TouchableOpacity onPress={() => navigation.navigate('Profile', { token: token.route.params.token })}>
+                <ProfilePicture id={id} token={token} />
+            </TouchableOpacity>
            <View style={styles.searchContainer}>
              <SearchBar
              	inputStyle={{backgroundColor: 'white'}}
@@ -77,7 +103,7 @@ export const HomeScreen = (token) => {
                keyExtractor={(item, index) => index.toString()}
                renderItem={({ item }) => (
                  <View style={styles.itemContainer}>
-
+                   <ProfilePicture id={parseJsonId(item)} token={token.route.params.token} imageStyle={styles.image} containerStyle={styles.imageContainer} />
                    <Text style={styles.text}>{parseJsonString(item)}</Text>
                  </View>
                )}
@@ -108,7 +134,6 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     flex: 1,
-    marginTop: RFValue(175),
     width: '75%',
     justifyContent: 'center',
     left: '10%',
@@ -120,11 +145,27 @@ const styles = StyleSheet.create({
     // ... your other styles ...
   },
   itemContainer: {
-    marginBottom: RFValue(20),
+    marginBottom: RFValue(10),
+    marginLeft: '25%',
+    flexDirection: 'row',
+
   },
   text: {
     marginTop: RFValue(10),
     fontSize: RFValue(16),
     left: '6%',
+    marginTop: '5%',
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  imageContainer: {
+    margin: 0,
+    padding: 0,
+    marginTop: 0,
+  },
+  image: {
+    width: 60,
+    height: 60,
+    borderRadius: 400,
   },
 });

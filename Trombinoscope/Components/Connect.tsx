@@ -14,7 +14,6 @@ async function getAccessToken(response: response) {
 async function HandleResponse(response: response) {
     if (response.status === 200) {
         const token = await getAccessToken(response)
-        console.log(token)
         return token;
     } else if (response.status === 401) {
         console.log("Invalid Email and Password combination.")
@@ -28,7 +27,6 @@ async function HandleResponse(response: response) {
 }
 
 export async function Connect(email, password) {
-    console.log(email, password)
     const response = await fetch('http://masurao.fr/api/employees/login', {
         method: 'POST',
         headers: {
