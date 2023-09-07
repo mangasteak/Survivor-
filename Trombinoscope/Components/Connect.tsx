@@ -15,7 +15,6 @@ async function HandleResponse(response: response) {
     if (response.status === 200) {
         const token = await getAccessToken(response)
         console.log(token)
-        alert("Token: " + token)
         return token;
     } else if (response.status === 401) {
         console.log("Invalid Email and Password combination.")

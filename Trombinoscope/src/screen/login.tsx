@@ -9,8 +9,8 @@ import {
     Button,
     ImageBackground,
 } from 'react-native';
-import logo from '../Assets/logo.png';
-import { Connect } from '../Components/Connect';
+import logo from '../../Assets/logo.png';
+import { Connect } from '../../Components/Connect';
 import { useNavigation } from '@react-navigation/native';
 
 export function Login() {
@@ -46,7 +46,7 @@ export function Login() {
          onPress={() => {
              Connect(email, password).then((token) => {
                  if (token != "Invalid token") {
-                     navigation.navigate('Profile');
+                     navigation.navigate('Trombi', {token: token});
                  }
              })
          }}>

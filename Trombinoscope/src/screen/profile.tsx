@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Title } from 'react-native';
-import { DisplayAnImage } from '../Components/Image.tsx'
+import { DisplayAnImage } from '../../Components/Image.tsx'
 
 export function Profile() {
     return (

@@ -11,7 +11,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { Button } from "@react-native-material/core";
 import { DisplayAnImage } from "./Components/Image.tsx";
-import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeScreen } from "./src/screen/searchBar.tsx";
 import { SettingsScreen} from "./src/screen/settingsScreen.tsx"
@@ -34,4 +33,11 @@ const NavigationStack = () => {
 const App = () => (
     NavigationStack()
 )
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+});
 export default App;

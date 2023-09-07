@@ -1,113 +1,104 @@
 import React, {useEffect, useState, Component} from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, FlatList} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import SearchBar from 'react-native-material-design-searchbar';
+import { Icon } from 'react-native-elements';
 
-export const HomeScreen = () => {
+
+export const HomeScreen = (token) => {
 
     const navigation = useNavigation();
     const [data, setData] = useState([]);
+    const [jsonStringArray, setJsonStringArray] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
 
     useEffect(() => {
-        fetchData("https://masurao.fr/api/employees");
+        fetchData("https://masurao.fr/api/employees", token.route.params.token);
     }, []);
 
-    class Test extends Component {
-           render() {
-            return(
-            <SearchBar
-                onSearchChange={() => console.log("On Search Change")}
-                height={50}
-                placeholder={'Search...'}
-                autoCorrect={false}
-                padding={5}
-                returnKeyType={'search'}/>
-            );
-         }
-         };
-
     const fetchData = async (url, token) => {
-        headers: {
-        'Content-Type': 'application/json',
-        'X-group-authorization': 'Xqkwp3zjCVdV0fBhfzMASBwnK9DcE4xW',
-        'Authorization': token},
-
         try {
-            const response = await fetch(url);
+            const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-group-authorization': 'Xqkwp3zjCVdV0fBhfzMASBwnK9DcE4xW',
+                        'Authorization': 'Bearer '+ token,
+                    },}
+            );
             const json = await response.json();
-            setData(json.results);
-            setFilteredData(json.results);
-            console.log(json.results);
+            console.log(json);
+            const jsonStringArray = json.map((obj) => JSON.stringify(obj));
+            setData(json);
+            setJsonStringArray(jsonStringArray)
+            setFilteredData(jsonStringArray);
         } catch (error) {
             console.error(error);
         }
+
+        };
+
+    const parseJsonString = (jsonString) => {
+        const data = JSON.parse(jsonString);
+        return `${data.name} ${data.surname}`;
+      };
+
+
+    const handleSearch = (text) => {
+    	const filtered = jsonStringArray.filter((item) =>
+       	parseJsonString(item).toLowerCase().includes(text.toLowerCase())
+        );
+        setFilteredData(filtered);
     };
 
-    const searchFilterFunction = (text) => {
-        if(text){
-            const newData = data.filter(item => {
-                const itemData = item.name.first ? item.name.first.toUpperCase() : ''.toUpperCase();
-                const textData = text.toUpperCase();
-                return itemData.indexOf(textData) > -1;
-            })
-            setFilteredData(newData);
-        } else {
-            setFilteredData(data);
-        }
-    }
+       return (
+         <View style={styles.container}>
+           <View style={styles.searchContainer}>
+             <SearchBar
+             	inputStyle={{backgroundColor: 'white'}}
+               	containerStyle={{backgroundColor: 'white', borderWidth: 1, borderRadius: 5}}
+               	inputContainerStyle={{backgroundColor: 'white'}}
+               	placeholderTextColor={'#g5g5g5'}
+               	onSearchChange={handleSearch}
+               	height={50}
+               	placeholder={'Search...'}
+               	autoCorrect={false}
+               	returnKeyType={'search'}
+             />
+           </View>
+           <View style={styles.flatListContainer}>
+             <FlatList
+               data={filteredData}
+               keyExtractor={(item, index) => index.toString()}
+               renderItem={({ item }) => (
+                 <View style={styles.itemContainer}>
 
-    return (
-        <ScrollView>
-            <Text style={styles.textFriends}>{filteredData.length} Friends</Text>
-            {
-                filteredData.map((item, index) => {
-                    return (
-                        <View key={index} style={styles.itemContainer}>
-                            <Image
-                                source={{ uri: item.picture.large }}
-                                style={styles.image}
-                            />
-                            <View>
-                                <Text style={styles.textName}>{item.name.first} {item.name.last}</Text>
-                                <Text style={styles.textEmail}>{item.login.username}</Text>
-                            </View>
-                        </View>
-                    )
-                })
-            }
-        </ScrollView>
-    );
-  }
+                   <Text style={styles.text}>{parseJsonString(item)}</Text>
+                 </View>
+               )}
+             />
+           </View>
+         </View>
+       );
+     };
 
 
 const styles = StyleSheet.create({
-    textFriends: {
-        fontSize: 20,
-        textAlign: 'left',
-        marginLeft: 10,
-        fontWeight: 'bold',
-        marginTop: 10,
-    },
-    itemContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginLeft: 10,
-        marginTop: 10,
-    },
-    image: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-    },
-    textName: {
-        fontSize: 17,
-        marginLeft: 10,
-        fontWeight: "600",
-    },
-    textEmail: {
-        fontSize: 14,
-        marginLeft: 10,
-        color: "grey",
-    },
+  container: {
+    flex: 1,
+    padding: 10,
+  },
+  searchContainer: {
+    flex: 1,
+  },
+  flatListContainer: {
+    flex: 6,
+  },
+  itemContainer: {
+    marginBottom: 20,
+  },
+  text: {
+    marginTop: 10,
+    fontSize: 16,
+  },
 });
