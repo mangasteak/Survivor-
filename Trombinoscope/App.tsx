@@ -24,7 +24,7 @@ const NavigationStack = () => {
             <Stack.Navigator initialRouteName = "Login">
                 <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
                 <Stack.Screen name="Profile" component={Profile} options={{headerShown: false}}/>
-                <Stack.Screen name="Trombi" component={HomeScreen}/>
+                <Stack.Screen name="Trombi" component={HomeScreen} options={{headerShown: false}}/>
             </Stack.Navigator>
         </NavigationContainer>
     )

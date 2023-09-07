@@ -2,7 +2,7 @@ import React, {useEffect, useState, Component} from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, FlatList} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import SearchBar from 'react-native-material-design-searchbar';
-import { Icon } from 'react-native-elements';
+import { RFValue } from "react-native-responsive-fontsize";
 
 
 export const HomeScreen = (token) => {
@@ -53,6 +53,11 @@ export const HomeScreen = (token) => {
 
        return (
          <View style={styles.container}>
+         	<Image
+                 source={require('../../Assets/background2.png')}
+                 style={styles.backgroundImage}
+                 resizeMode="cover"
+               />
            <View style={styles.searchContainer}>
              <SearchBar
              	inputStyle={{backgroundColor: 'white'}}
@@ -86,19 +91,40 @@ export const HomeScreen = (token) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+  },
+  backgroundImage: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+  overlay: {
+    flex: RFValue(1),
+    backgroundColor: 'rgba(0, 0, 0, 0.3)', // You can change the background color and opacity here
+    padding: RFValue(10),
   },
   searchContainer: {
     flex: 1,
+    marginTop: RFValue(175),
+    width: '75%',
+    justifyContent: 'center',
+    left: '10%',
+
+    // ... your other styles ...
   },
   flatListContainer: {
-    flex: 6,
+    flex: RFValue(7),
+    // ... your other styles ...
   },
   itemContainer: {
-    marginBottom: 20,
+    marginBottom: RFValue(20),
   },
   text: {
-    marginTop: 10,
-    fontSize: 16,
+    marginTop: RFValue(10),
+    fontSize: RFValue(16),
+    left: '6%',
   },
 });
